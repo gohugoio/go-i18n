@@ -30,12 +30,6 @@ jobs:
           args: release --clean --snapshot
       - name: Test
         run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
-      - name: Upload coverage
-        uses: codecov/codecov-action@v5
-        if: matrix.go-version.name == 'latest'
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
       - name: Lint
         uses: golangci/golangci-lint-action@v7
         if: matrix.go-version.name == 'latest'
