@@ -116,7 +116,7 @@ func (ec *extractCommand) execute() error {
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(path, content, 0666)
+	return os.WriteFile(path, content, 0o666)
 }
 
 type duplicateMessageIDErr struct {

@@ -38,7 +38,7 @@ func TestExtract(t *testing.T) {
 			fileName: "file.go",
 			file: `package main
 
-			import "github.com/nicksnyder/go-i18n/v2/i18n"
+			import "github.com/gohugoio/go-i18n/v2/i18n"
 
 			var m1 = &i18n.Message{
 				ID: "m",
@@ -57,7 +57,7 @@ func TestExtract(t *testing.T) {
 			fileName: "file.go",
 			file: `package main
 
-			import "github.com/nicksnyder/go-i18n/v2/i18n"
+			import "github.com/gohugoio/go-i18n/v2/i18n"
 
 			var m1 = &i18n.Message{
 				ID: "m",
@@ -271,7 +271,7 @@ zero = "Zero translation"
 			fileName: "file.go",
 			file: `package main
 
-			import "github.com/nicksnyder/go-i18n/v2/i18n"
+			import "github.com/gohugoio/go-i18n/v2/i18n"
 
 			type ConstType string
 
@@ -295,7 +295,7 @@ zero = "Zero translation"
 			defer mustRemoveAll(t, outdir)
 
 			inpath := filepath.Join(indir, test.fileName)
-			if err := os.WriteFile(inpath, []byte(test.file), 0666); err != nil {
+			if err := os.WriteFile(inpath, []byte(test.file), 0o666); err != nil {
 				t.Fatal(err)
 			}
 

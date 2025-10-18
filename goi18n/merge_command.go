@@ -93,7 +93,7 @@ func (mc *mergeCommand) execute() error {
 		return err
 	}
 	for path, content := range ops.writeFiles {
-		if err := os.WriteFile(path, content, 0666); err != nil {
+		if err := os.WriteFile(path, content, 0o666); err != nil {
 			return err
 		}
 	}
