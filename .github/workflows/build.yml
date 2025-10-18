@@ -1,48 +1,43 @@
 name: Build
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - main
+  pull_request:
+
 jobs:
   build:
-    name: Build
+    name: Build (go:${{ matrix.go-version.name }})
     runs-on: ubuntu-latest
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'pull_request'
+    strategy:
+      matrix:
+        go-version:
+        - name: latest
+          version: 1.24.x
+        - name: previous
+          version: 1.23.x
     steps:
       - name: Install Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
-          go-version: stable
+          go-version: ${{ matrix.go-version.version }}
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Build
-        uses: goreleaser/goreleaser-action@v2
+        uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
-          args: release --rm-dist --snapshot
-          workdir: v2
+          args: release --clean --snapshot
       - name: Test
-        working-directory: v2
         run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
       - name: Upload coverage
-        uses: codecov/codecov-action@v1
-  build_1_12:
-    name: Build with Go 1.12.17
-    runs-on: ubuntu-latest
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'pull_request'
-    steps:
-      - name: Install Go
-        uses: actions/setup-go@v4
+        uses: codecov/codecov-action@v5
+        if: matrix.go-version.name == 'latest'
         with:
-          go-version: '1.12.17'
-      - name: Git checkout
-        uses: actions/checkout@v3
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+      - name: Lint
+        uses: golangci/golangci-lint-action@v7
+        if: matrix.go-version.name == 'latest'
         with:
-          path: gopath/src/github.com/nicksnyder/go-i18n
-      - name: Build and test
-        working-directory: gopath/src/github.com/nicksnyder/go-i18n/v2
-        env:
-            GOPATH: ${{ github.workspace }}/gopath
-            GO111MODULE: on
-        run: |
-          go get ./...
-          go test -race ./...
+          version: v2.0
