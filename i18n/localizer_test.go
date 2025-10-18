@@ -7,8 +7,8 @@ import (
 	"testing"
 	gotmpl "text/template"
 
-	"github.com/nicksnyder/go-i18n/v2/i18n/template"
-	"github.com/nicksnyder/go-i18n/v2/internal/plural"
+	"github.com/gohugoio/go-i18n/v2/i18n/template"
+	"github.com/gohugoio/go-i18n/v2/internal/plural"
 	"golang.org/x/text/language"
 )
 
